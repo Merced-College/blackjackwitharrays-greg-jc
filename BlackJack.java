@@ -3,6 +3,8 @@ import java.util.Scanner;
 
 public class BlackJack {
 
+    //constants - cannot change their values
+    //static - I can use these in every function without having to pass them in
     private static final String[] SUITS = { "Hearts", "Diamonds", "Clubs", "Spades" };
     private static final String[] RANKS = { "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King",
             "Ace" };
@@ -30,6 +32,7 @@ public class BlackJack {
         scanner.close();
     }
 
+    //initializing the deck to integers 0-51
     private static void initializeDeck() {
         for (int i = 0; i < DECK.length; i++) {
             DECK[i] = i;
@@ -40,6 +43,7 @@ public class BlackJack {
         Random random = new Random();
         for (int i = 0; i < DECK.length; i++) {
             int index = random.nextInt(DECK.length);
+            //swapping two integers in the array
             int temp = DECK[i];
             DECK[i] = DECK[index];
             DECK[index] = temp;
