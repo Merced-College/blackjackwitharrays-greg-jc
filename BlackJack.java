@@ -18,7 +18,13 @@ public class BlackJack {
 
 
     public static void main(String[] args) {
+        
+        int [] results = {0, 0}; // An array is declared and initialized to count the wins and losses
+        boolean playAgain = true;
         Scanner scanner = new Scanner(System.in);
+
+        //runs the games's methods while playAgain is true
+        while (playAgain) {
         
         //The following two methods are being called, meaning the program will execute the code within each method. 
         initializeDeck();
@@ -29,18 +35,43 @@ public class BlackJack {
         
         //This playerTotal variable returns an integer value from the method playerTurn depending on the input from scanner and the added number to the new total value. 
         playerTotal = playerTurn(scanner, playerTotal);
+        
         //If playerTotal is Greater than 21 then the following System.out.println is printed out and the program terminates. 
         if (playerTotal > 21) {
             System.out.println("You busted! Dealer wins.");
-            return;
+            results[0]++; //adds a loss, index[0] stores the losses
+            System.out.print("Do you want to play again? (yes / no): ");
+            
+            //exits while loop when user does not type "yes"
+            String response = scanner.nextLine();
+            if (!response.equalsIgnoreCase("yes")) {
+                playAgain = false;
+            }
+            continue;
         }
         
         dealerTotal = dealerTurn(dealerTotal); //The dealerTurn method is called with the current value of dealerTotal as an input. The current value is then used to execute the code within. 
+        determineWinner(playerTotal, dealerTotal, results); //The determineWinner method is called using the current values of playerTotal and dealerTotal to use within the method's code.
         
-        determineWinner(playerTotal, dealerTotal); //The determineWinner method is called using the current values of playerTotal and dealerTotal to use within the method's code.
-        //closes the Scanner object. 
+        System.out.println("Do you want to play again? (yes / no): ");
+        
+        String response = scanner.nextLine();
+        if (!response.equalsIgnoreCase("yes")) {
+            playAgain = false;
+        }
+        
+     
+        
+        }
+        //Displays the amount of wins and losses in the game
+        System.out.println("Thank you for playing!");
+        System.out.println("Total wins: " + results[1]);
+        System.out.println("Total losses: " + results[0]);
+        
+        //closes the Scanner object.
         scanner.close();
     }
+    
     //assigning each element in the DECK array a value from 0 to 51
     private static void initializeDeck() {
         for (int i = 0; i < DECK.length; i++) {
@@ -79,7 +110,7 @@ public class BlackJack {
     }
 
     private static int dealInitialDealerCards() {
-        int card1 = dealCard(); //Deal a singl card to the dealer
+        int card1 = dealCard(); //Deal a single card to the dealer
         // Display the dealer's card using the RANKS and SUITS arrays
         System.out.println("Dealer's card: " + RANKS[card1] + " of " + SUITS[DECK[currentCardIndex] % 4]);
         return cardValue(card1); //return value of the dealt card
@@ -128,13 +159,16 @@ public class BlackJack {
     }
 
     //Compares dealerTotal and playerTotal to determines a winner
-    private static void determineWinner(int playerTotal, int dealerTotal) {
+    private static void determineWinner(int playerTotal, int dealerTotal, int[] results ) {
         if (dealerTotal > 21 || playerTotal > dealerTotal) {
             System.out.println("You win!");
+            results[1]++; //adds a win, index[1] will store the wins
+            
         } else if (dealerTotal == playerTotal) {
             System.out.println("It's a tie!");
         } else {
             System.out.println("Dealer wins!");
+            results[0]++; //adds a loss. index[0] will store the losses
         }
     }
 
